@@ -7,9 +7,9 @@
  */
 
 function Parent(name){
-    this.name = name;
+    this.name = name || 'Parent';
 }
 
 Parent.prototype.say = function(){
-    console.log("Parent say : " + this.name);
+    return this.name;
 }

@@ -2,15 +2,81 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>QUnit Example</title>
+    <title>代码重用模式</title>
     <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.12.0.css">
 </head>
 <body>
 <div id="qunit"></div>
 <div id="qunit-fixture"></div>
 <script src="http://code.jquery.com/qunit/qunit-1.12.0.js"></script>
+<script src="./parent.js"></script>
 <script>
 
+    test( "类似继承模式", function() {
+
+        function Child(name){
+
+        }
+
+        Child.prototype = new Parent();
+
+        var child = new Child("hello");
+
+        ok( undefined !== child.name);
+        ok( !child.hasOwnProperty("name"))
+        ok("Parent" === child.say());
+
+    });
+
+    test( "借用构造函数", function() {
+
+        function Child(name){
+            //必须要是arguments
+            Parent.apply(this,arguments);
+//            Parent.apply(arguments);
+//            Parent.apply(this,name);
+        }
+
+
+        var child = new Child("hello");
+
+        ok( "hello" === child.name);
+        ok( child.hasOwnProperty("name"))
+        ok( undefined === child.say);
+
+    });
+
+
+    test( "借用和设置原型", function() {
+
+        function Child(name){
+            //必须要是arguments
+            Parent.apply(this,arguments);
+        }
+        Child.prototype = new Parent();
+
+        var child = new Child("hello");
+
+        ok( "hello" === child.name);
+        ok( child.hasOwnProperty("name"))
+        ok( "hello" === child.say());
+
+    });
+
+    test( "共享原型", function() {
+
+        function Child(name){
+        }
+
+        Child.prototype =  Parent.prototype;
+
+        var child = new Child("hello");
+
+        ok( undefined === child.name);
+        ok( undefined === child.say());
+        ok( undefined !== child.say);
+
+    });
 
 </script>
 </body>
