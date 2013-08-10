@@ -75,7 +75,32 @@
         ok( undefined === child.name);
         ok( undefined === child.say());
         ok( undefined !== child.say);
+    });
 
+    test( "临时构造函数", function() {
+
+        function Child(name){
+        }
+
+        var F = function(){};
+        F.prototype = Parent.prototype;
+        Child.prototype =  new F();
+
+        var child = new Child("hello");
+
+        ok( undefined === child.name);
+        ok( undefined === child.say());
+        ok( undefined !== child.say);
+
+        ok( "Parent" === child.constructor.name );
+
+        //重写构造指针
+        Child.prototype.constructor = Child;
+        ok( "Child" === child.constructor.name );
+
+
+
+        window.child = child;
     });
 
 </script>
